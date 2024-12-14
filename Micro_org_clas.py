@@ -6,7 +6,9 @@ import os
 import cv2
 import imghdr
 import numpy as np
+
 #cleaning data 
+
 data_dir = "C://Users//walid//Desktop//coding projects//Micro org classifier//Micro_Organism"
 img_ext = ['jpg','jpeg','png','bmp']
 
@@ -47,6 +49,7 @@ data = tf.keras.utils.image_dataset_from_directory(
 data = data.map(lambda x,y :(x/255,y))
 data_size = len(data)
 
+#spliting data
 
 train_size = int(data_size*.6)
 val_size = int(data_size*.3)
@@ -56,6 +59,7 @@ train = data.take(train_size)
 val = data.skip(train_size).take(val_size)
 test = data.skip(train_size+val_size).take(test_size)
 
+#nural network 
 
 model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(256, 256, 3)))
 model.add(MaxPool2D())
@@ -79,11 +83,11 @@ model.add(Dropout(0.5))
 
 model.add(Dense(8, activation='softmax'))
 
-
+#summary
 model.compile(optimizer='adam', loss=tf.losses.SparseCategoricalCrossentropy(from_logits=False), metrics=['accuracy'])
 model.summary()
 
+#saving the modele 
 
 hist = model.fit(train,epochs=35,validation_data=val)
-
 model.save(os.path.join('C://Users//walid//Desktop//coding projects//Micro org classifier','ORGCLAS1.h5'))
